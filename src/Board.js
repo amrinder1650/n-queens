@@ -61,7 +61,8 @@
       );
     },
 
-
+    //It goes row, column. Call this.get(rowIndex) to get that rowIndex, and then this.get(rowIndex)[columnIndex] to get the space at that row and column
+    //this.get('n') returns the dimension of one of the sides. So for instance, if we had an 8 x 8 board, then this.get('n') would return 8;
 /*
          _             _     _
      ___| |_ __ _ _ __| |_  | |__   ___ _ __ ___ _
@@ -77,13 +78,33 @@
     // ROWS - run from left to right
     // --------------------------------------------------------------
     //
-    // test if a specific row on this board contains a conflict
+    // test if a specific row on this board contains a conflict returns the number of the row if there is a conflict. If not, then it returns false because it is "false" that it has a row conflict at that row
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      var count = 0;
+      for (var i = 0; i < this.get('n'); i++) {
+        if (this.get(rowIndex)[i]) {
+          count++;
+        }
+      }
+      if (count > 1) {
+        return true;
+      }
+      return false;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
+      for (var r = 0; r < this.get('n'); r++) {
+        var count = 0;
+        for (var c = 0; c < this.get('n'); c++) {
+          if (this.get(r)[c]) {
+            count++;
+            if (count > 1) {
+              return true;
+            }
+          }
+        }
+      }
       return false; // fixme
     },
 
@@ -94,12 +115,32 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var count = 0;
+      for (var r = 0; r < this.get('n'); r++) {
+        if (this.get(r)[colIndex] === 1) {
+          count++;
+        }
+      }
+      if (count > 1) {
+        return true;
+      }
+      return false;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      for (var c = 0; c < this.get('n'); c++) {
+        var count = 0;
+        for (var r = 0; r < this.get('n'); r++) {
+          if (this.get(r)[c]) {
+            count++;
+          }
+        }
+        if (count > 1) {
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -109,11 +150,68 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+
+      // var row = 0;
+      // var col = majorDiagonalColumnIndexAtFirstRow;
+      // var count = 0;
+
+      // for (var c = col; c < this.get('n'); c++) {
+      //   if (this.get(row)[c]) {
+      //     count ++;
+      //   }
+      //   row ++;
+      // }
+
+      // if (count > 1) {
+      //   return true;
+      // }
+
+      // return false; // fixme
+
+
+
+      var row = 0;    //We start at first row. We will need this because we will be updating the row that we are looking at
+      var col = majorDiagonalColumnIndexAtFirstRow; //Same story
+      var count = 0;
+      while (row < this.get('n') && col < this.get('n')) {
+        if (this.get(row)[col]) {
+          count++;
+        }
+        row++;
+        col++;
+      }
+      if (count > 1) {
+        return true;
+      }
+
+
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      var col = 0;
+      var row = 0;
+      var currCol = col;
+      var currRow = row;
+      while (row < this.get('n') - 1) {
+        col = 0;
+        while (col < this.get('n') - 1) {
+          currRow = row;
+          currCol = col;
+          var count = 0;
+          while (currRow < this.get('n') && currCol < this.get('n')) {
+            if (this.get(currRow)[currCol]) {
+              count++;
+            }
+            currRow++;
+            currCol++;
+            if (count > 1) {
+              return true;
+            }
+          }
+          col++;
+        }
+      }
       return false; // fixme
     },
 
