@@ -151,11 +151,15 @@
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
 
+      // var arr = [];
+      // arr[0] = majorDiagonalColumnIndexAtFirstRow;
+      // var arr2 = arr.slice();
+
       // var row = 0;
-      // var col = majorDiagonalColumnIndexAtFirstRow;
+      // // var col = arr2[0];
       // var count = 0;
 
-      // for (var c = col; c < this.get('n'); c++) {
+      // for (var c = majorDiagonalColumnIndexAtFirstRow; c < this.get('n'); c++) {
       //   if (this.get(row)[c]) {
       //     count ++;
       //   }
@@ -189,27 +193,47 @@
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      var col = 0;
-      var row = 0;
-      var currCol = col;
-      var currRow = row;
-      while (row < this.get('n') - 1) {
-        col = 0;
-        while (col < this.get('n') - 1) {
-          currRow = row;
-          currCol = col;
-          var count = 0;
-          while (currRow < this.get('n') && currCol < this.get('n')) {
-            if (this.get(currRow)[currCol]) {
-              count++;
-            }
-            currRow++;
-            currCol++;
-            if (count > 1) {
-              return true;
+      // var col = 0;
+      // var row = 0;
+      // var currCol = col;
+      // var currRow = row;
+      // while (row < this.get('n') - 1) {
+      //   col = 0;
+      //   while (col < this.get('n') - 1) {
+      //     currRow = row;
+      //     currCol = col;
+      //     var count = 0;
+      //     while (currRow < this.get('n') && currCol < this.get('n')) {
+      //       if (this.get(currRow)[currCol]) {
+      //         count++;
+      //       }
+      //       currRow++;
+      //       currCol++;
+      //       if (count > 1) {
+      //         return true;
+      //       }
+      //     }
+      //     col++;
+      //   }
+      // }
+
+
+
+      for (var r = 0; r < this.get('n'); r++) {
+        for (var c = 0; c < this.get('n'); c++) {
+          if (this.get(r)[c]) {
+            count = 0;
+            for (var r2 = r; r2 < this.get('n'); r2++) {
+              for (var c2 = c; c2 < this.get('n'); c2++) {
+                if (this.get(r2)[c2]) {
+                  count++;
+                  if (count > 1) {
+                    return true;
+                  }
+                }
+              }
             }
           }
-          col++;
         }
       }
       return false; // fixme
