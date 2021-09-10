@@ -35,90 +35,47 @@ window.findNRooksSolution = function(n) {
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
+//Recursion:
+//
 window.countNRooksSolutions = function(n) {
   var solutionCount = 0;
-  var metricies = [];
-  //sets a new starting point
-  for (var r = 0; r < n; r++) {
-    for (var c = 0; c < n; c++) {
-      var currBoard = new Board({n: n});
-      console.log('currBoard', currBoard);
-      //need to put a skip in there
-      currBoard.togglePiece(r, c);
-      for (var row = r; row < n + r; row++) {
-        var ro = row;
-        for (var col = c; col < n + c; col++) {
-          var co = col;
-          if (ro >= n) {
-            ro -= n;
-          }
-          if (co >= n) {
-            co -= n;
-          }
-          currBoard.togglePiece(ro, co);
-          if (currBoard.hasAnyRooksConflicts()) {
-            currBoard.togglePiece(ro, co);
-          }
-          //if()
-        }
-      }
-      //Check to see if it matches anything in metricies, if it does not, then we append it to metricies.
-      var dupe = false;
-      for (var i = 0; i < metricies.length; i++) {
-        if (JSON.stringify(currBoard) === metricies[i]) {
-          dupe = true;
-        }
-      }
-      if (dupe === false) {
-        metricies.push(JSON.stringify(currBoard));
-        solutionCount++;
-      }
+
+  var board = new Board({n: n});
+
+  // var recursiveHelper = function(numRooks = 0) {
+  //   if (numRooks === 4) {
+  //     solutionCount++;
+  //   }
+  //   for (var i = 0; i < n; i++) {
+  //     var sum = 0;
+  //     for (var j = 0; j < n; j++) {
+  //       sum += this.get(i)[j];
+  //     }
+  //     if (sum === 1) {
+
+  //     }
+  //   }
+
+  // };
+
+  //Goes Left to right
+  //Decision Tree
+  var rec = function(row) {
+    if (row === n - 1) {
+      solutionCount++;
+      return;
     }
-  }
-
-  /*
-  for (var r = 0; r < n; r++) {
-    for (var c = 0; c < n; c++) {
-      var currBoard = new Board({n: n});
-      console.log('currBoard', currBoard);
-      //need to put a skip in there
-      currBoard.togglePiece(r, c);
-      for (var row = r; row < n + r; row++) {
-        var ro = row;
-        for (var col = c; col < n + c; col++) {
-          var co = col;
-          if (ro >= n) {
-            ro -= n;
-          }
-          if (co >= n) {
-            co -= n;
-          }
-          currBoard.togglePiece(ro, co);
-          if (currBoard.hasAnyRooksConflicts()) {
-            currBoard.togglePiece(ro, co);
-          }
-          //if()
-        }
+    for (var i = 0; i < n; i++) {
+      // debugger;
+      board.togglePiece(row, i);
+      if (!board.hasAnyRooksConflicts()) {
+        rec(row + 1);
       }
-      //Check to see if it matches anything in metricies, if it does not, then we append it to metricies.
-      var dupe = false;
-      for (var i = 0; i < metricies.length; i++) {
-        if (JSON.stringify(currBoard) === metricies[i]) {
-          dupe = true;
-        }
-      }
-      if (dupe === false) {
-        metricies.push(JSON.stringify(currBoard));
-        solutionCount++;
-      }
+      board.togglePiece(row, i);
     }
-  }
-  */
+  };
 
-  if (n > 1) {
-    solutionCount = n * this.countNRooksSolutions(n - 1);
-  }
-
+  rec(0);
 
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
