@@ -101,7 +101,36 @@ window.findNQueensSolution = function(n) {
   //   startingCol++;
   // }
 
+  var board = new Board({n: n});
+  var boardLayout = board.rows();
+  var solution;
+
+  if (n === 0 || n === 2 || n === 3) {
+    return boardLayout;
+  }
+
+  var rec = function(row) {
+    if (row === n) {
+      solution = boardLayout;
+      return;
+    }
+    for (let i = 0; i < n; i++) {
+      boardLayout[row][i] = 1;
+      if (!board.hasAnyQueensConflicts()) {
+        rec(row + 1);
+      }
+      if (solution !== undefined) {
+        break;
+      }
+      boardLayout[row][i] = 0;
+    }
+  };
+  rec(0);
+
+  /*
+  HEREHEREHERE
   var solution = new Board({n: n});
+  console.log('hereherehere', solution);
   if (n === 0) {
     return [];
   }
@@ -112,10 +141,34 @@ window.findNQueensSolution = function(n) {
     return;
   }
 
-  var haventFoundOne = true;
+  var oneQueens = function(row, col, numQueens = 0) {
+    if (row === n ) {
+      if (numQueens === n) {
+        return;
+      } else {
+        return oneQueens(0, col + 1);
+      }
+    }
+    for (var i = col; i < n + col; i++) {
+      var co = i;
+      if (co >= n) {
+        co -= n;
+      }
+      solution.togglePiece(row, co);
+      if (!solution.hasAnyQueensConflicts()) {
+        oneQueens(row + 1, 0, numQueens + 1);
+      }
+      solution.togglePiece(row, co);
+    }
+  };
+  oneQueens(0, 0);
+  */
 
+  /*
+
+  var haventFoundOne = true;
   var numQueensPlaced = 0;
-  startingCol = 0;
+  var startingCol = 0;
   while (haventFoundOne) {
     for (var i = 0; i < n; i++) {
       for (var col = startingCol; col < n + startingCol; col++) {
@@ -131,11 +184,15 @@ window.findNQueensSolution = function(n) {
         }
       }
     }
+    debugger;
     if (numQueensPlaced === n) {
       haventFoundOne = false;
+    } else {
+      solution = new Board({n: n});
     }
     startingCol++;
   }
+  */
   /*
 
   for (var i = 0; i < n; i++) {
